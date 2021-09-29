@@ -1,0 +1,60 @@
+version: '2.1'
+services:
+  payara1:
+    image: payara/server-full:5.2021.7
+    privileged: true
+    user: root
+    environment:
+      - PREBOOT_COMMANDS=/opt/payara/pre-boot.sh
+      - POSTBOOT_COMMANDS=/opt/payara/post-boot.sh
+    volumes:
+      - ./pre-boot.sh:/opt/payara/pre-boot.sh
+      - ./post-boot.sh:/opt/payara/post-boot.sh
+    ports:
+      - "48080:8080"
+      - "48181:8181"
+      - "44848:4848"
+      - "49009:9009"
+#      - "1099:1099"
+      - "44900:4900"
+    networks:
+      - my-network1
+  payara2:
+    image: payara/server-full:5.2021.7
+    privileged: true
+    user: root
+    environment:
+      - PREBOOT_COMMANDS=/opt/payara/pre-boot.sh
+      - POSTBOOT_COMMANDS=/opt/payara/post-boot.sh
+    volumes:
+      - ./pre-boot.sh:/opt/payara/pre-boot.sh
+      - ./post-boot.sh:/opt/payara/post-boot.sh
+    ports:
+      - "58080:8080"
+      - "58181:8181"
+      - "54848:4848"
+      - "59009:9009"
+#      - "1099:1099"
+      - "54900:4900"
+    networks:
+      - my-network1
+  mydb:
+    image: postgres:9.6-alpine
+#    container_name: mydb
+    environment:
+      - POSTGRES_PASSWORD=testpassword
+      - POSTGRES_USER=testuser
+      - POSTGRES_DB=testdatabase
+    ports:
+      - "45432:5432"
+    command: postgres -c max_prepared_transactions=100 -c max_connections=200 -c config_file=/etc/postgresql/postgresql.conf
+    volumes:
+#      - my-datavolume:/var/lib/postgresql/data
+      - ./my-postgres.conf:/etc/postgresql/postgresql.conf
+    networks:
+      - my-network1
+volumes:
+  my-datavolume:
+networks:
+  my-network1:
+    name: my-network1

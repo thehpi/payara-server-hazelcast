@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    <persistence-unit name="TestPersistence">
+        <jta-data-source>jdbc/dbTestDatabase</jta-data-source>
+        <class>nl.hans.entities.Hans</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <shared-cache-mode>ALL</shared-cache-mode>
+        <properties>
+            <!--            <property name="javax.persistence.schema-generation.database.action" value="create"/>-->
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <!--            <property name="javax.persistence.schema-generation.scripts.action" value="create"/>-->
+            <!--            <property name="javax.persistence.schema-generation.scripts.create-target" value="target/schema.sql"/>-->
+
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.DefaultSessionLog"/>
+
+            <property name="eclipselink.cache.coordination.protocol"
+                      value="fish.payara.persistence.eclipselink.cache.coordination.HazelcastPublishingTransportManager"/>
+            <property name="eclipselink.cache.coordination.channel" value="MyPUChannel"/>
+
+            <!--      <property name="eclipselink.profiler" value="PerformanceProfiler"/>-->
+            <!--      <property name="eclipselink.profiler" value="PerformanceMonitor"/>-->
+
+        </properties>
+    </persistence-unit>
+</persistence>

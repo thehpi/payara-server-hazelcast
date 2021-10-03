@@ -1,20 +1,21 @@
 # payara-server-hazelcast
 
-## Install
+This repo was created to demonstrate payara which uses hazelcast to provide 2nd level JPA cache
+for multiple instances.
 
-Start containers
+Two docker instances with payara are started plus a postgresql database.
 
-	docker-compose up -d
+A generated hazelcast configuration file is used instead of the payara settings.
 
-Wait until done
+The previous version (see git history) uses payara configuration.
 
-	docker-compose logs --follow
+## Run
 
-Setup hazelcast ips
+Start containers and generate hazelcast-config.xml
 
-	./tcpip.sh
+	./restart.sh
 
-Setup payara and build app
+Setup payara, build and deploy app
 
 	./build.sh
 

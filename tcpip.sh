@@ -1,20 +1,33 @@
 #!/bin/bash
 
-getIps() {
-	i=1
-	unset c
-	echo -n "${c}$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' payara-server-hazelcast_payara${i}_1):4900"
-
-	i=2
-	c=","
-	echo "${c}$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' payara-server-hazelcast_payara${i}_1):4900"
-}
-
 #####################3
 
-ips=$(getIps)
+. ${0%/*}/functions.sh
+
+#--------------------------------------------------------------------------------------
+generateIpList() {
+	local c ip
+
+	getIps 1 2 | while read ip
+	do
+		echo -n "${c}${ip}:4900"
+		c=","
+	done
+}
+
+#--------------------------------------------------------------------------------------
+expandVariables() {
+	set -u
+
+	echo "cat <<EOF
+$(cat "$@")
+EOF" | bash
+}
+
+#########################
+ips=$(generateIpList)
 
 for i in 4 5
 do
-	server -$i -cc "set-hazelcast-configuration --dynamic --clustermode tcpip --tcpipmembers ${ips}"
+	asadmin --port=${i}4848 set-hazelcast-configuration --dynamic --clustermode tcpip --tcpipmembers ${ips}
 done

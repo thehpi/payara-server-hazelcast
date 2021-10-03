@@ -24,6 +24,7 @@ echo server1: update 2nd
 echo server 1: show 2nd
 ./testget.sh 4 $id | showjson
 
+sleep 1
 echo server 2: show 2nd
 ./testget.sh 5 $id | showjson
 

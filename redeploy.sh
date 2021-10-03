@@ -2,5 +2,5 @@
 
 nr=${1:-4}
 
-server -${nr} -udpa rest
-server -${nr} -dpf target/rest.war
+asadmin --port=${nr}4848 undeploy rest
+asadmin --port=${nr}4848 deploy --upload=true target/rest.war

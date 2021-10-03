@@ -2,14 +2,18 @@ version: '2.1'
 services:
   payara1:
     image: payara/server-full:5.2021.7
+    container_name: payara1
     privileged: true
     user: root
     environment:
       - PREBOOT_COMMANDS=/opt/payara/pre-boot.sh
       - POSTBOOT_COMMANDS=/opt/payara/post-boot.sh
+      - PAYARA_ARGS=--debug
     volumes:
       - ./pre-boot.sh:/opt/payara/pre-boot.sh
       - ./post-boot.sh:/opt/payara/post-boot.sh
+      - ./hazelcast-aws-3.4.1-SNAPSHOT.jar:/opt/payara/hazelcast-aws.jar
+      - ./hazelcast-config.xml:/opt/payara/appserver/glassfish/domains/domain1/config/hazelcast-config.xml
     ports:
       - "48080:8080"
       - "48181:8181"
@@ -21,14 +25,18 @@ services:
       - my-network1
   payara2:
     image: payara/server-full:5.2021.7
+    container_name: payara2
     privileged: true
     user: root
     environment:
       - PREBOOT_COMMANDS=/opt/payara/pre-boot.sh
       - POSTBOOT_COMMANDS=/opt/payara/post-boot.sh
+      - PAYARA_ARGS=--debug
     volumes:
       - ./pre-boot.sh:/opt/payara/pre-boot.sh
       - ./post-boot.sh:/opt/payara/post-boot.sh
+      - ./hazelcast-aws-3.4.1-SNAPSHOT.jar:/opt/payara/hazelcast-aws.jar
+      - ./hazelcast-config.xml:/opt/payara/appserver/glassfish/domains/domain1/config/hazelcast-config.xml
     ports:
       - "58080:8080"
       - "58181:8181"
@@ -40,7 +48,7 @@ services:
       - my-network1
   mydb:
     image: postgres:9.6-alpine
-#    container_name: mydb
+    container_name: mydb
     environment:
       - POSTGRES_PASSWORD=testpassword
       - POSTGRES_USER=testuser
